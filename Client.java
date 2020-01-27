@@ -32,6 +32,8 @@ public class Client {
 		System.out.println(niveau.toString());
 		statement.close();
 		connexion.close();
+		
+		Elements[] els = {Elements.Ski,Elements.Surf};
 	}
 
 }
