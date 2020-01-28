@@ -1,0 +1,32 @@
+Hello Mehdi,
+Pas de souci, je vais quand même te donner le sujet comme ça tu peux commencer quand tu veux.
+
+L’idée est très simple : créer un programme de gestion de location de ski (en JAVA) liée à une BDD (en SQL). 
+
+1/ Je veux pouvoir booker une réservation de plusieurs éléments :
+- Ski
+- Surf
+- Monoski
+- Patinette
+- Luge
+- Chaussures (ski, mono ou surf)
+- Avec ou sans casque
+
+2/ Dans la résa, il faut avoir les infos suivantes :
+- Nombre de personnes
+- Sexe
+- Âge 
+- Taille
+- Poids
+- Niveau (débutant, confirmé, expert)
+- Durée de location 
+
+3/ Sachant que :
+- Si tu prends des skis, tu as obligatoirement des bâtons
+- Si tu as moins de 10 ans, le casque est obligatoire
+
+4/ Les résas peuvent être rentrées soit :
+- Manuellement avec une interface console JAVA
+- Automatiquement par un fichier JSON qui est parsé par le logiciel
+
+N’hésite surtout pas si tu as des questions !
