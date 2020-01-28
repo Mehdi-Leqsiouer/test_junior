@@ -1,5 +1,6 @@
 package p1;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -12,23 +13,19 @@ public class Reservation {
 	private int duree;
 	private Map<String,Personne> liste_personne;
 	
-	public Reservation(int id, int nb_personnes, int duree) {
-		this.id_resa = id;
+	public Reservation(int nb_personnes, int duree) {
 		this.nb_personnes = nb_personnes;
 		this.duree = duree;
 		this.liste_personne = new HashMap<String,Personne>();
+		
+		try {
+			Client.InsertionBDresa(this);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	public Reservation(int id,int nb_personnes, int duree,Map<String,Personne> liste) {
-		this.id_resa = id;
-		this.nb_personnes = nb_personnes;
-		this.duree = duree;
-		if (liste != null)
-			liste_personne = liste;
-		else 
-			this.liste_personne = new HashMap<String,Personne>();
-	}
-	
+
 	public Personne RecherchePersonne(String key) {
 		if (liste_personne.containsKey(key))
 			return liste_personne.get(key);
@@ -37,7 +34,7 @@ public class Reservation {
 	
 	public void AjoutPersonne(Personne p) {
 		String key = p.getNom()+p.getPrenom();
-		if (!liste_personne.containsKey(key))
+		if (!liste_personne.containsKey(key) && liste_personne.size() < nb_personnes)
 			liste_personne.put(key, p);
 	}
 	
@@ -81,6 +78,14 @@ public class Reservation {
 
 	public void setListe_personne(Map<String,Personne> liste_personne) {
 		this.liste_personne = liste_personne;
+	}
+
+	public int getId_resa() {
+		return id_resa;
+	}
+
+	public void setId_resa(int id_resa) {
+		this.id_resa = id_resa;
 	}
 	
 
