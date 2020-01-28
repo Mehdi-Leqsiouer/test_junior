@@ -13,10 +13,9 @@ public class Personne {
 	private Niveau niveau;
 	private int id_resa;
 	private Elements element;
-	private boolean chaussures;
 	private boolean casque;
 	
-	public Personne(String nom, String prenom, String sexe, int age, int taille, double poids, Niveau level, Elements el, boolean chaussures,boolean casque, int resa) {
+	public Personne(String nom, String prenom, String sexe, int age, int taille, double poids, Niveau level, Elements el,boolean casque, int resa) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.sexe = sexe;
@@ -26,7 +25,6 @@ public class Personne {
 		this.niveau = level;
 		this.element = el;
 		this.casque = casque;
-		this.chaussures = chaussures;
 		if (this.age < 10)
 			this.casque = true;
 		
@@ -79,14 +77,6 @@ public class Personne {
 
 	public void setCasque(boolean casque) {
 		this.casque = casque;
-	}
-
-	public boolean hasChaussures() {
-		return chaussures;
-	}
-
-	public void setChaussures(boolean chaussures) {
-		this.chaussures = chaussures;
 	}
 
 	public int getIdPersonne() {

@@ -5,5 +5,8 @@ public enum Elements {
 	Surf,
 	Monoski,
 	Patinette,
+	ChaussureSki,
+	ChaussureMonoSki,
+	ChaussureSurf,
 	Luge;
 }

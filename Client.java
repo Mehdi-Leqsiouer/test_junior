@@ -21,18 +21,19 @@ public class Client {
 		
 		// REQUETE
 		conn = DriverManager.getConnection( url, utilisateur, motDePasse );
-		
+		AgenceSki agence = new AgenceSki();
 		Reservation resa = new Reservation(5,3);
-		Personne p1 = new Personne("Boukhatem", "Tarik", "H", 19, 190, 70, Niveau.Confirmé, Elements.Luge,true,false,1);//getResa
+		Personne p1 = new Personne("Boukhatem", "Tarik", "H", 19, 190, 70, Niveau.Confirmé, Elements.Luge,false,1);//getResa
 		resa.AjoutPersonne(p1);
-		
+		agence.AjoutResa(resa);
+		System.out.println(agence.toString());
 		
 		
 		conn.close();
 	}
 	
 	public static void InsertionBDpersonne(Personne p) throws SQLException {
-		String sql = "INSERT INTO personne (nom, prenom, age, niveau, poids, taille, element, chaussure, casque, idReservation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO personne (nom, prenom, age, niveau, poids, taille, element, casque, idReservation) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1,p.getNom());
 		pstmt.setString(2,p.getPrenom());
@@ -41,9 +42,8 @@ public class Client {
 		pstmt.setDouble(5, p.getPoids());
 		pstmt.setInt(6, p.getTaille());
 		pstmt.setString(7, p.getElement().toString());
-		pstmt.setBoolean(8, p.hasChaussures());
-		pstmt.setBoolean(9, p.hasCasque());
-		pstmt.setInt(10, p.getIdResa());
+		pstmt.setBoolean(8, p.hasCasque());
+		pstmt.setInt(9, p.getIdResa());
 		pstmt.executeUpdate();
 		pstmt.close();
 		
