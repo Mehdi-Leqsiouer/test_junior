@@ -17,7 +17,7 @@ public class Personne {
 		this.age = age;
 		this.taille = taille;
 		this.poids = poids;
-		if (!level.equals("debutant") || !level.equals("confirme") || !level.equals("expert"))
+		if (!level.equals("debutant") && !level.equals("confirme") && !level.equals("expert"))
 			this.niveau = "debutant";
 		else
 			this.niveau = level;

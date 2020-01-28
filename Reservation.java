@@ -7,23 +7,32 @@ import java.util.Set;
 
 public class Reservation {
 	
+	private int id_resa;
 	private int nb_personnes;
 	private int duree;
 	private Map<String,Personne> liste_personne;
 	
-	public Reservation(int nb_personnes, int duree) {
+	public Reservation(int id, int nb_personnes, int duree) {
+		this.id_resa = id;
 		this.nb_personnes = nb_personnes;
 		this.duree = duree;
 		this.liste_personne = new HashMap<String,Personne>();
 	}
 	
-	public Reservation(int nb_personnes, int duree,Map<String,Personne> liste) {
+	public Reservation(int id,int nb_personnes, int duree,Map<String,Personne> liste) {
+		this.id_resa = id;
 		this.nb_personnes = nb_personnes;
 		this.duree = duree;
 		if (liste != null)
 			liste_personne = liste;
 		else 
 			this.liste_personne = new HashMap<String,Personne>();
+	}
+	
+	public Personne RecherchePersonne(String key) {
+		if (liste_personne.containsKey(key))
+			return liste_personne.get(key);
+		return null;
 	}
 	
 	public void AjoutPersonne(Personne p) {
