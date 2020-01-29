@@ -11,12 +11,12 @@ public class Reservation {
 	private int id_resa;
 	private int nb_personnes;
 	private int duree;
-	private Map<String,Personne> liste_personne;
+	private Map<Integer,Personne> liste_personne;
 	
 	public Reservation(int nb_personnes, int duree) {
 		this.nb_personnes = nb_personnes;
 		this.duree = duree;
-		this.liste_personne = new HashMap<String,Personne>();
+		this.liste_personne = new HashMap<Integer,Personne>();
 		
 		try {
 			Client.InsertionBDresa(this);
@@ -26,20 +26,20 @@ public class Reservation {
 		}
 	}
 
-	public Personne RecherchePersonne(String key) {
+	public Personne RecherchePersonne(Integer key) {
 		if (liste_personne.containsKey(key))
 			return liste_personne.get(key);
 		return null;
 	}
 	
 	public void AjoutPersonne(Personne p) {
-		String key = p.getNom()+p.getPrenom();
+		Integer key = p.getIdPersonne();
 		if (!liste_personne.containsKey(key) && liste_personne.size() < nb_personnes)
 			liste_personne.put(key, p);
 	}
 	
 	public void SupprPersonne(Personne p) {
-		String key = p.getNom()+p.getPrenom();
+		Integer key = p.getIdPersonne();
 		if (liste_personne.containsKey(key))
 			liste_personne.remove(key,p);
 	}
@@ -47,10 +47,10 @@ public class Reservation {
 	@Override
 	public String toString() {
 		String msg = "----RESERVATION----\nNombre de personnes : "+nb_personnes+" \n durée : "+duree+" jours\n";
-		Set<String> key = liste_personne.keySet();
-		Iterator<String> it = key.iterator();
+		Set<Integer> key = liste_personne.keySet();
+		Iterator<Integer> it = key.iterator();
 		while(it.hasNext()) {
-			String cle = (String)it.next();
+			Integer cle = (Integer)it.next();
 			msg += liste_personne.get(cle).toString();
 		}
 		return "\n"+msg;
@@ -72,11 +72,11 @@ public class Reservation {
 		this.duree = duree;
 	}
 
-	public Map<String,Personne> getListe_personne() {
+	public Map<Integer,Personne> getListe_personne() {
 		return liste_personne;
 	}
 
-	public void setListe_personne(Map<String,Personne> liste_personne) {
+	public void setListe_personne(Map<Integer,Personne> liste_personne) {
 		this.liste_personne = liste_personne;
 	}
 
