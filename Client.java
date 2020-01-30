@@ -42,12 +42,11 @@ public class Client {
 		Niveau niveau = Niveau.Débutant;
 		Elements element = Elements.Ski;
 		boolean casque = false;
-		Reservation resa;
-		Scanner sc;
+		Reservation resa = null;
+		Scanner sc = new Scanner(System.in);
 		do {
 			System.out.println("----- Saisir 1 : faire une réservation ");
 			System.out.println("----- Saisir q pour quitter -----");
-			sc = new Scanner(System.in);
 			saisie = sc.nextLine();
 			switch (saisie) {
 				case "1":
@@ -58,7 +57,9 @@ public class Client {
 					duree = sc.nextInt();
 					resa = new Reservation(nbpersonne,duree);
 					for(int i = 0; i < nbpersonne; i++) {
+						System.out.println("----- Saisir la personne n°"+(i+1) +"-----");
 						System.out.println("Saisir le prénom : ");
+						sc.nextLine();
 						prenom = sc.nextLine();
 						System.out.println("Saisir le nom : ");
 						nom = sc.nextLine();
@@ -70,8 +71,26 @@ public class Client {
 						taille = sc.nextInt();
 						System.out.println("Saisir le poids : ");
 						poids = sc.nextDouble();
-						System.out.println("Saisir le niveau : débutant/confirmé/expert : ");
-						//niveau = sc.nextLine();
+						sc.nextLine();
+						do {
+							System.out.println("Saisir le niveau : débutant/confirmé/expert : ");
+							System.out.println("1 : Débutant");
+							System.out.println("2 : Confirmé");
+							System.out.println("3 : Expert");
+							saisie2 = sc.nextLine();
+						}while (!saisie2.equalsIgnoreCase("1") && !saisie2.equalsIgnoreCase("2") && !saisie2.equalsIgnoreCase("3"));
+						switch(saisie2) {
+							case "1":
+								niveau = Niveau.Débutant;
+								break;
+							case "2":
+								niveau = Niveau.Confirmé;
+								break;
+							case "3":
+								niveau = Niveau.Expert;
+								break;
+						}
+						saisie2 = "";
 						do {
 							System.out.println("Saisir l'élement à louer : Ski/Monoski/Surf/Luge/ChaussuresSki/ChausuresMonoski/ChaussuresSurf : ");
 							System.out.println("1 : Ski");
@@ -82,12 +101,47 @@ public class Client {
 							System.out.println("6 : Chaussures monoski");
 							System.out.println("7 : Chaussures de surf");
 							saisie2 = sc.nextLine();
-						}while(!saisie2.equalsIgnoreCase("q"));
-						System.out.println("Saisir si il y a un casque ou non (O/N) : ");
-						//casque = sc.nextLine();
+						}while(!saisie2.equalsIgnoreCase("1") && !saisie2.equalsIgnoreCase("2") && !saisie2.equalsIgnoreCase("3") && !saisie2.equalsIgnoreCase("4") && !saisie2.equalsIgnoreCase("5") &&  !saisie2.equalsIgnoreCase("6") && !saisie2.equalsIgnoreCase("7") );
+						
+						switch(saisie2) {
+							case "1":
+								element = Elements.Ski;
+								break;
+							case "2":
+								element = Elements.Monoski;
+								break;
+							case "3":
+								element = Elements.Surf;
+								break;
+							case "4":
+								element = Elements.Luge;
+								break;
+							case "5":
+								element = Elements.ChaussureSki;
+								break;
+							case "6":
+								element = Elements.ChaussureMonoSki;
+								break;
+							case "7":
+								element = Elements.ChaussureSurf;
+								break;
+						}
+						if (element.equals(Elements.Ski))
+							System.out.println("Baton réservé d'office");
+						saisie2 = "";
+						do {
+							System.out.println("Saisir si il y a un casque ou non (O/N) : ");
+							saisie2 = sc.nextLine();
+						}while (!saisie2.equalsIgnoreCase("O") && !saisie2.equalsIgnoreCase("N"));
+						if (age < 10 && !casque)
+							System.out.println("Moins de 10 ans donc casque réserver d'office");
+						casque = (saisie2.equalsIgnoreCase("O")) ? true : false;
+						resa.AjoutPersonne(new Personne(prenom,nom,sexe,age,taille,poids,niveau,element,casque,resa.getId_resa()));
 					}
 					break;
+				
 			}
+			agence.AjoutResa(resa);
 			
 		}while(!saisie.equalsIgnoreCase("q"));
 		

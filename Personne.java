@@ -14,6 +14,7 @@ public class Personne {
 	private int id_resa;
 	private Elements element;
 	private boolean casque;
+	private boolean baton;
 	
 	public Personne(String nom, String prenom, String sexe, int age, int taille, double poids, Niveau level, Elements el,boolean casque, int resa) {
 		this.nom = nom;
@@ -25,8 +26,11 @@ public class Personne {
 		this.niveau = level;
 		this.element = el;
 		this.casque = casque;
+		this.baton = false;
 		if (this.age < 10)
 			this.casque = true;
+		if (el.equals(Elements.Ski))
+			this.baton = true;
 		
 		this.id_resa = resa;
 		
@@ -39,7 +43,7 @@ public class Personne {
 	
 	@Override
 	public String toString() {
-		return "Nom : "+nom+" Prenom : "+prenom+" sexe : "+sexe+" age : "+age+" taille : "+taille+" poids : "+poids+ " niveau : "+niveau+"\n";
+		return "Nom : "+nom+" Prenom : "+prenom+" sexe : "+sexe+" age : "+age+" taille : "+taille+" poids : "+poids+ " niveau : "+niveau.toString()+"Element réservé : "+element.toString()+"Avec casque : "+casque+"\n";
 	}
 	
 	public int getIdResa() {
@@ -101,6 +105,14 @@ public class Personne {
 
 	public int getAge() {
 		return age;
+	}
+
+	public boolean isBaton() {
+		return baton;
+	}
+
+	public void setBaton(boolean baton) {
+		this.baton = baton;
 	}
 	
 }

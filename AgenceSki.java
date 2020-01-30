@@ -31,7 +31,7 @@ public class AgenceSki {
 	
 	@Override
 	public String toString() {
-		String msg = "---- AGENCE X----";
+		String msg = "---- AGENCE ----";
 		Iterator<Reservation> i = liste.iterator();
 		while(i.hasNext()) {
 			Reservation r = (Reservation)i.next();
