@@ -1,12 +1,21 @@
 package p1;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
+
+import org.json.simple.*;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 
 public class Client {
@@ -18,17 +27,13 @@ public class Client {
 	static Connection conn;
 	
 
-	public static void main(String[] args) throws SQLException {		
+	@SuppressWarnings("unchecked")
+	public static void main(String[] args) throws SQLException, IOException, ParseException{		
 		
 		// REQUETE
 		conn = DriverManager.getConnection( url, utilisateur, motDePasse );
 		AgenceSki agence = new AgenceSki();
-		/*Reservation resa = new Reservation(5,3);
-		Personne p1 = new Personne("Boukhatem", "Tarik", "H", 19, 190, 70, Niveau.Confirmé, Elements.Luge,false,1);//getResa
-		resa.AjoutPersonne(p1);
-		agence.AjoutResa(resa);
-		System.out.println(agence.toString());*/
-		
+
 		String saisie = "";
 		String saisie2 = "";
 		int nbpersonne = 0;
@@ -45,10 +50,16 @@ public class Client {
 		Reservation resa = null;
 		Scanner sc = new Scanner(System.in);
 		do {
-			System.out.println("----- Saisir 1 : faire une réservation ");
+			
+			//menu
+			System.out.println();
+			System.out.println("----- Saisir 1 : faire une réservation manuelle ");
+			System.out.println("----- Saisir 2 : faire une réservation automatique via .JSON ");
 			System.out.println("----- Saisir q pour quitter -----");
 			saisie = sc.nextLine();
 			switch (saisie) {
+			
+				//saisie manuelle
 				case "1":
 					System.out.println("Création d'une réservation: ");
 					System.out.println("Saisir le nombre de personne de la réservation : ");
@@ -138,10 +149,87 @@ public class Client {
 						casque = (saisie2.equalsIgnoreCase("O")) ? true : false;
 						resa.AjoutPersonne(new Personne(prenom,nom,sexe,age,taille,poids,niveau,element,casque,resa.getId_resa()));
 					}
+					agence.AjoutResa(resa);
+					break;
+					
+				//JSON	
+				case "2":
+					//saisie fichier
+					String fichier ="F:\\workspace\\Test_devinci-junior\\src\\p1\\JSONExample.json";
+					FileReader file = new FileReader(fichier);
+					JSONParser parser = new JSONParser();
+					Object obj = parser.parse(file);
+		            JSONObject jsonObject =  (JSONObject) obj;
+		            
+					nbpersonne = (int) (long) jsonObject.get("nb_personne");
+					duree = (int) (long) jsonObject.get("duree");
+					
+					resa = new Reservation(nbpersonne,duree);
+					
+					
+					JSONArray personnes = (JSONArray) jsonObject.get("personnes");
+					Iterator<?> iterateur = personnes.iterator();
+					Map<String,Object> map = new HashMap<String, Object>();
+					while(iterateur.hasNext()) {
+						map = (Map<String, Object>) iterateur.next();
+						prenom = (String) map.get("prenom");
+						nom =  (String) map.get("nom");
+						sexe = (String) map.get("sexe");
+						age = (int) (long) map.get("age");
+						taille = (int) (long) map.get("taille");
+						poids = (double) (long) map.get("poids");
+						saisie2 = (String) map.get("niveau");
+						switch(saisie2) {
+							case "debutant":
+								niveau = Niveau.Débutant;
+								break;
+							case "confirme":
+								niveau = Niveau.Confirmé;
+								break;
+							case "expert":
+								niveau = Niveau.Expert;
+								break;
+						}
+						saisie2 = (String) map.get("element");						
+						switch(saisie2) {
+							case "Ski":
+								element = Elements.Ski;
+								break;
+							case "Monoski":
+								element = Elements.Monoski;
+								break;
+							case "Surf":
+								element = Elements.Surf;
+								break;
+							case "Luge":
+								element = Elements.Luge;
+								break;
+							case "ChaussureSki":
+								element = Elements.ChaussureSki;
+								break;
+							case "ChaussureMonoSki":
+								element = Elements.ChaussureMonoSki;
+								break;
+							case "ChaussureSurf":
+								element = Elements.ChaussureSurf;
+								break;
+						}
+						
+						if (element.equals(Elements.Ski))
+							System.out.println("Baton réservé d'office");
+						
+						saisie2 = (String) map.get("casque");
+						if (age < 10 && !casque)
+							System.out.println("Moins de 10 ans donc casque réserver d'office");
+						casque = (saisie2.equalsIgnoreCase("true")) ? true : false;
+						resa.AjoutPersonne(new Personne(prenom,nom,sexe,age,taille,poids,niveau,element,casque,resa.getId_resa()));
+						System.out.println(map);
+					}
+					agence.AjoutResa(resa);
 					break;
 				
 			}
-			agence.AjoutResa(resa);
+			
 			
 		}while(!saisie.equalsIgnoreCase("q"));
 		
@@ -149,13 +237,7 @@ public class Client {
 		sc.close();
 		conn.close();
 	}
-	
-	public static String SaisitUtilisateur(String msg, Scanner sc) {
-		System.out.println(msg);
-		String saisie = sc.nextLine();
-		return saisie;
-	}
-	
+
 	public static void InsertionBDpersonne(Personne p) throws SQLException {
 		String sql = "INSERT INTO personne (nom, prenom, age, niveau, poids, taille, element, casque, idReservation) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement pstmt = conn.prepareStatement(sql);

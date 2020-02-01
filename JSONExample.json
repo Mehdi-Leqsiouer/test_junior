@@ -1,0 +1,28 @@
+{
+  "nb_personne": 2,
+  "duree": 30,
+  "personnes": [
+    {
+      "nom": "Lqs",
+      "prenom": "Mehdi",
+	  "sexe": "H",
+	  "age": 20,
+	  "taille": 180,
+	  "poids" : 77,
+	  "niveau": "debutant",
+	  "element": "Ski",
+	  "casque": "false"
+    }, 
+   {
+      "nom": "nait",
+      "prenom": "Driss",
+	  "sexe": "H",
+	  "age": 20,
+	  "taille": 175,
+	  "poids" : 70,
+	  "niveau": "expert",
+	  "element": "Monoski",
+	  "casque": "true"
+    }
+  ]
+}
