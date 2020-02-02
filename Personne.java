@@ -43,7 +43,9 @@ public class Personne {
 	
 	@Override
 	public String toString() {
-		return "Nom : "+nom+" Prenom : "+prenom+" sexe : "+sexe+" age : "+age+" taille : "+taille+" poids : "+poids+ " niveau : "+niveau.toString()+"Element réservé : "+element.toString()+"Avec casque : "+casque+"\n";
+		String baton1 = (this.baton) ? " Avec baton" : "";
+		String casque1 = (this.casque) ? " Avec casque" : "";
+		return "\t Nom : "+nom+"\t Prenom : "+prenom+"\t sexe : "+sexe+"\t age : "+age+"\t taille : "+taille+"\t poids : "+poids+ "\t niveau : "+niveau.toString()+"\t Element réservé : "+element.toString()+baton1+casque1+"\n";
 	}
 	
 	public int getIdResa() {

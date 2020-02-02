@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -59,8 +60,9 @@ public class Client {
 			
 			//menu
 			System.out.println();
-			System.out.println("----- Saisir 1 : faire une réservation manuelle ");
-			System.out.println("----- Saisir 2 : faire une réservation automatique via .JSON ");
+			System.out.println("----- Saisir 1 : faire une réservation manuelle -----");
+			System.out.println("----- Saisir 2 : faire une réservation automatique via .JSON -----");
+			System.out.println("----- Saisir 3 : afficher toutes les réservations -----");
 			System.out.println("----- Saisir q pour quitter -----");
 			saisie = sc.nextLine();
 			switch (saisie) {
@@ -106,6 +108,9 @@ public class Client {
 							case "3":
 								niveau = Niveau.Expert;
 								break;
+							default:
+								niveau = Niveau.Débutant;
+								break;
 						}
 						saisie2 = "";
 						do {
@@ -142,6 +147,9 @@ public class Client {
 							case "7":
 								element = Elements.ChaussureSurf;
 								break;
+							default:
+								element = Elements.Ski;
+								break;
 						}
 						if (element.equals(Elements.Ski))
 							System.out.println("Baton réservé d'office");
@@ -156,6 +164,8 @@ public class Client {
 						resa.AjoutPersonne(new Personne(prenom,nom,sexe,age,taille,poids,niveau,element,casque,resa.getId_resa()));
 					}
 					agence.AjoutResa(resa);
+					System.out.println("Réservation ajoutée avec succès, la voici : ");
+					System.out.println(resa);
 					break;
 					
 				//JSON	
@@ -164,10 +174,11 @@ public class Client {
 					System.out.println("Choisir le fichier .json");
 					
 					File file1 = null;
+					//File workingDirectory = new File(System.getProperty("user.dir"));
+					
 					do {
-						if (!file1.toString().contains(".json"))
-							System.out.println("Merci de séléctionner un fichier .json");
 						dialogue.showOpenDialog(null);
+						//dialogue.setCurrentDirectory(workingDirectory); 
 				        file1 = dialogue.getSelectedFile();      
 					}while (!file1.toString().contains(".json") && !file1.toString().contains(".JSON"));
 					       
@@ -204,6 +215,9 @@ public class Client {
 							case "expert":
 								niveau = Niveau.Expert;
 								break;
+							default:
+								niveau = Niveau.Débutant;
+								break;
 						}
 						saisie2 = (String) map.get("element");						
 						switch(saisie2) {
@@ -228,19 +242,23 @@ public class Client {
 							case "ChaussureSurf":
 								element = Elements.ChaussureSurf;
 								break;
+							default:
+								element = Elements.Ski;
+								break;
 						}
-						
-						if (element.equals(Elements.Ski))
-							System.out.println("Baton réservé d'office");
-						
+					
 						saisie2 = (String) map.get("casque");
-						if (age < 10 && !casque)
-							System.out.println("Moins de 10 ans donc casque réserver d'office");
 						casque = (saisie2.equalsIgnoreCase("true")) ? true : false;
 						resa.AjoutPersonne(new Personne(prenom,nom,sexe,age,taille,poids,niveau,element,casque,resa.getId_resa()));
-						System.out.println(map);
+						//System.out.println(map);
 					}
 					agence.AjoutResa(resa);
+					System.out.println("Réservation ajoutée avec succès, la voici : ");
+					System.out.println(resa);
+					break;
+					
+				case "3":
+					AffichageReservations();
 					break;
 				
 			}
@@ -251,6 +269,53 @@ public class Client {
 		System.out.println("Fin du programme");
 		sc.close();
 		conn.close();
+	}
+	
+	public static void AffichageReservations() throws SQLException {
+		String sql = "select * from reservations";
+		String sql2 = "";
+		Statement stmt = conn.createStatement();
+		Statement stmt2 = conn.createStatement();
+		ResultSet res = stmt.executeQuery(sql);
+		ResultSet res2 = null;
+		ResultSetMetaData resultMeta = res.getMetaData();
+		ResultSetMetaData resultMeta2 = null;
+		int x = 1;
+		int y = 1;
+		int id = 0;
+		while (res.next()) {
+			System.out.println("Réservation numéro : "+x);
+			for(int i = 1; i <= resultMeta.getColumnCount(); i++)
+		        System.out.print("\t" + resultMeta.getColumnName(i).toUpperCase() + " ");
+		       System.out.println();  
+		     for(int i = 1; i <= resultMeta.getColumnCount(); i++) 
+		    	 System.out.print("\t" + res.getObject(i).toString() + "\t |");
+		     
+		     id = (int) res.getObject("idReservation");
+		     sql2 = "select * from personne where idReservation = "+id;
+		     res2 = stmt2.executeQuery(sql2);
+		     resultMeta2 = res2.getMetaData();
+		     y = 1;
+		     while(res2.next()) {
+		    	 System.out.println();
+		    	 System.out.println("Personne numéro : "+y);
+			     for(int i = 1; i <= resultMeta2.getColumnCount(); i++)
+				        System.out.print("\t" + resultMeta2.getColumnName(i).toUpperCase() + "\t ");
+				       System.out.println();
+				       
+		         for(int i = 1; i <= resultMeta2.getColumnCount(); i++) 
+			    	 System.out.print("\t" + res2.getObject(i).toString() + "\t |");
+		         y++;
+		     }
+		     
+		     System.out.println(); 
+		     System.out.println("\n---------------------------------");
+		     x++;
+		}
+		stmt.close();
+		stmt2.close();
+		res.close();
+		res2.close();
 	}
 
 	public static void InsertionBDpersonne(Personne p) throws SQLException {

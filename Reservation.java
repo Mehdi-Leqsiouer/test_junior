@@ -49,9 +49,12 @@ public class Reservation {
 		String msg = "----RESERVATION----\nNombre de personnes : "+nb_personnes+" \n durée : "+duree+" jours\n";
 		Set<Integer> key = liste_personne.keySet();
 		Iterator<Integer> it = key.iterator();
+		int i = 1;
 		while(it.hasNext()) {
+			msg += "Personne numéro : "+i;
 			Integer cle = (Integer)it.next();
 			msg += liste_personne.get(cle).toString();
+			i++;
 		}
 		return "\n"+msg;
 	}
