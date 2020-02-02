@@ -1,5 +1,6 @@
 package p1;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,6 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Scanner;
+
+import javax.swing.JFileChooser;
 
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
@@ -34,6 +37,9 @@ public class Client {
 		conn = DriverManager.getConnection( url, utilisateur, motDePasse );
 		AgenceSki agence = new AgenceSki();
 
+		JFileChooser dialogue = new JFileChooser();		        
+		
+        
 		String saisie = "";
 		String saisie2 = "";
 		int nbpersonne = 0;
@@ -155,8 +161,17 @@ public class Client {
 				//JSON	
 				case "2":
 					//saisie fichier
-					String fichier ="F:\\workspace\\Test_devinci-junior\\src\\p1\\JSONExample.json";
-					FileReader file = new FileReader(fichier);
+					System.out.println("Choisir le fichier .json");
+					
+					File file1 = null;
+					do {
+						if (!file1.toString().contains(".json"))
+							System.out.println("Merci de séléctionner un fichier .json");
+						dialogue.showOpenDialog(null);
+				        file1 = dialogue.getSelectedFile();      
+					}while (!file1.toString().contains(".json") && !file1.toString().contains(".JSON"));
+					       
+					FileReader file = new FileReader(file1.toString());
 					JSONParser parser = new JSONParser();
 					Object obj = parser.parse(file);
 		            JSONObject jsonObject =  (JSONObject) obj;
